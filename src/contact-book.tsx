@@ -10,7 +10,19 @@ const ContactBook = () => {
 
   const handleAddContact = (newPerson:Person) => {
     setPersons([...persons, { id: uuidv4(), ...newPerson }]);
-  }
+  };
+
+  const handleEditContact = (updatedPerson) => {
+    setPersons(
+      persons.map((person) => {
+        if (person.id === updatedPerson.id) {
+          return updatedPerson;
+        }
+        return person;
+      })
+    );
+    setPersonBeingEdited(null);
+  };
 
   return(
     <div>
@@ -19,10 +31,11 @@ const ContactBook = () => {
         {persons.map((person) => {
           if (personBeingEdited && person.id === personBeingEdited) {
             return (
-              <>
-                <div>This will be the from to edit {person.name}</div>
-                <button onClick={() => setPersonBeingEdited(null)}>Save</button>
-              </>
+              <ContactForm
+                title="Edit contact"
+                initialPerson={person}
+                onSave={handleEditContact}
+              />
             );
           }
           return (
